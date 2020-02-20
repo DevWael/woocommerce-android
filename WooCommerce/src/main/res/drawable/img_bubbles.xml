@@ -13,7 +13,7 @@
             android:strokeWidth="1"/>
         <path
             android:name="path_1"
-            android:fillColor="#be80b9"
+            android:fillColor="#B1082D"
             android:pathData="M 80.033 56.516 C 94.473 56.516 106.179 45.131 106.179 31.087 C 106.179 26.734 105.055 22.636 103.072 19.054 C 98.66 11.078 60.63 50.875 70.195 54.655 C 73.232 55.855 76.553 56.516 80.033 56.516"
             android:strokeWidth="1"/>
         <group android:name="group">
@@ -30,7 +30,7 @@
             android:strokeWidth="1"/>
         <path
             android:name="path_3"
-            android:fillColor="#be80b9"
+            android:fillColor="#B1082D"
             android:pathData="M 21.316 105.11 C 33.576 105.11 43.516 95.323 43.516 83.25 C 43.516 79.508 42.561 75.985 40.878 72.906 C 37.131 66.05 4.842 100.261 12.963 103.511 C 15.542 104.542 18.361 105.11 21.316 105.11"
             android:strokeWidth="1"/>
         <group android:name="group_3">
@@ -58,7 +58,7 @@
                 android:strokeWidth="1"/>
             <path
                 android:name="path_6"
-                android:fillColor="#be80b9"
+                android:fillColor="#B1082D"
                 android:pathData="M 58.814 155.704 C 69.167 155.704 77.56 147.515 77.56 137.413 C 77.56 134.282 76.754 131.334 75.332 128.758 C 72.169 123.021 44.902 151.647 51.76 154.366 C 53.938 155.229 56.319 155.704 58.814 155.704"
                 android:strokeWidth="1"/>
             <group android:name="group_6">
@@ -82,7 +82,7 @@
         <group android:name="group_8">
             <path
                 android:name="path_8"
-                android:fillColor="#be80b9"
+                android:fillColor="#B1082D"
                 android:pathData="M 17.846 165 C 20.286 165 22.264 167.143 22.264 169.786 C 22.264 172.43 20.286 174.573 17.846 174.573 C 15.406 174.573 13.427 172.43 13.427 169.786 C 13.427 167.143 15.406 165 17.846 165"
                 android:strokeWidth="1"/>
             <path

@@ -8,7 +8,7 @@
     <group android:name="group_9">
         <path
             android:name="path"
-            android:fillColor="#96588a"
+            android:fillColor="#CD0934"
             android:pathData="M 81.789 0 C 96.22 0 107.919 11.595 107.919 25.899 C 107.919 40.202 96.22 51.797 81.789 51.797 C 67.357 51.797 55.658 40.202 55.658 25.899 C 55.658 11.595 67.357 0 81.789 0"
             android:strokeWidth="1"/>
         <path
@@ -25,7 +25,7 @@
         </group>
         <path
             android:name="path_2"
-            android:fillColor="#96588a"
+            android:fillColor="#CD0934"
             android:pathData="M 22.845 57 C 35.097 57 45.031 66.967 45.031 79.264 C 45.031 91.56 35.097 101.527 22.845 101.527 C 10.591 101.527 0.658 91.56 0.658 79.264 C 0.658 66.967 10.591 57 22.845 57"
             android:strokeWidth="1"/>
         <path
@@ -53,7 +53,7 @@
         <group android:name="group_7">
             <path
                 android:name="path_5"
-                android:fillColor="#96588a"
+                android:fillColor="#CD0934"
                 android:pathData="M 59.393 115 C 69.74 115 78.128 123.34 78.128 133.629 C 78.128 143.917 69.74 152.258 59.393 152.258 C 49.046 152.258 40.658 143.917 40.658 133.629 C 40.658 123.34 49.046 115 59.393 115"
                 android:strokeWidth="1"/>
             <path
@@ -87,7 +87,7 @@
                 android:strokeWidth="1"/>
             <path
                 android:name="path_9"
-                android:fillColor="#96588a"
+                android:fillColor="#CD0934"
                 android:pathData="M 14.867 170 C 16.087 170 17.076 171.072 17.076 172.393 C 17.076 173.715 16.087 174.786 14.867 174.786 C 13.647 174.786 12.658 173.715 12.658 172.393 C 12.658 171.072 13.647 170 14.867 170"
                 android:strokeWidth="1"/>
         </group>

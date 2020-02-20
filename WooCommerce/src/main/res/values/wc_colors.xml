@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="wc_purple">#96588A</color>
-    <color name="wc_purple_highlight">#6696588a</color>
-    <color name="wc_purple_status">#864f7b</color>
+    <color name="wc_purple">#CD0934</color>
+    <color name="wc_purple_highlight">#8F0C26</color>
+    <color name="wc_purple_status">#B4082B</color>
     <color name="wc_grey_dark">#3C3C3C</color>
     <color name="wc_grey_medium">#595959</color>
     <color name="wc_green">#71B02F</color>

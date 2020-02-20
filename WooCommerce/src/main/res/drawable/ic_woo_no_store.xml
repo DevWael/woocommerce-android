@@ -158,19 +158,19 @@
   <path
       android:pathData="M96.454,166.618C98.248,166.786 99.692,166.967 100.167,167.137C101.493,167.61 101.587,167.799 99.977,168.178C98.366,168.557 87,168.178 87,168.178L87,166.666L86.792,166.666C86.792,166.666 84.643,124.461 87.201,104.709L97.306,131.282L96.454,166.618Z"
       android:strokeWidth="1"
-      android:fillColor="#96588A"
+      android:fillColor="#CD0934"
       android:fillType="evenOdd"
       android:strokeColor="#00000000"/>
   <path
       android:pathData="M87.201,104.709C84.643,124.461 86.792,166.666 86.792,166.666L96.453,166.666L97.306,131.282"
       android:strokeWidth="0.735"
       android:fillColor="#00000000"
-      android:strokeColor="#96588A"
+      android:strokeColor="#CD0934"
       android:fillType="evenOdd"/>
   <path
       android:pathData="M87,166C89.937,166.095 98.84,166.663 100.167,167.137C101.493,167.61 101.587,167.799 99.977,168.178C98.366,168.557 87,168.178 87,168.178L87,166Z"
       android:strokeWidth="1"
-      android:fillColor="#96588A"
+      android:fillColor="#CD0934"
       android:fillType="evenOdd"
       android:strokeColor="#00000000"/>
   <path
@@ -216,7 +216,7 @@
   <path
       android:pathData="M93,166C95.937,166.095 104.84,166.663 106.167,167.137C107.493,167.61 107.587,168.368 105.977,168.747C104.367,169.126 93,168.747 93,168.747L93,166Z"
       android:strokeWidth="1"
-      android:fillColor="#96588A"
+      android:fillColor="#CD0934"
       android:fillType="evenOdd"
       android:strokeColor="#00000000"/>
   <path

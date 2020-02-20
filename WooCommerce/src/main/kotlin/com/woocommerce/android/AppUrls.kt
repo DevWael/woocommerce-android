@@ -1,17 +1,17 @@
 package com.woocommerce.android
 
 object AppUrls {
-    const val APP_HELP_CENTER = "https://docs.woocommerce.com/document/android/"
-    const val APP_FEATURE_REQUEST = "http://ideas.woocommerce.com/forums/133476-woocommerce?category_id=84283"
+    const val APP_HELP_CENTER = "https://help.innoshop.co/"
+    const val APP_FEATURE_REQUEST = "https://innoshop.co/about-us.php"
 
-    const val AUTOMATTIC_HOME = "https://www.automattic.com/"
-    const val AUTOMATTIC_TOS = "https://woocommerce.com/terms-conditions/"
-    const val AUTOMATTIC_PRIVACY_POLICY = "https://www.automattic.com/privacy"
-    const val AUTOMATTIC_COOKIE_POLICY = "https://www.automattic.com/cookies"
-    const val AUTOMATTIC_HIRING = "https://automattic.com/work-with-us"
+    const val AUTOMATTIC_HOME = "https://innoshop.co/"
+    const val AUTOMATTIC_TOS = "https://innoshop.co/terms.php"
+    const val AUTOMATTIC_PRIVACY_POLICY = "https://innoshop.co/privacy.php"
+    const val AUTOMATTIC_COOKIE_POLICY = "https://innoshop.co/privacy.php"
+    const val AUTOMATTIC_HIRING = "https://innoshop.co"
 
-    const val WOOCOMMERCE_UPGRADE = "https://docs.woocommerce.com/document/how-to-update-woocommerce/"
-    const val WOOCOMMERCE_ADMIN_PLUGIN = "https://wordpress.org/plugins/woocommerce-admin"
+    const val WOOCOMMERCE_UPGRADE = "https://innoshop.co/pricing.php"
+    const val WOOCOMMERCE_ADMIN_PLUGIN = "https://innoshop.co"
 
     const val URL_LEARN_MORE_REVIEWS = "https://woocommerce.com/posts/reviews-woocommerce-best-practices/"
     const val URL_LEARN_MORE_ORDERS = "https://woocommerce.com/blog/"

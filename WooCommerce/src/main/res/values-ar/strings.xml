@@ -159,7 +159,7 @@ Language: ar
     <string name="update_downloaded">قام Woo بتنزيل تحديث</string>
     <string name="install">تثبيت</string>
     <string name="error_disabled_apis">تعذَّر الوصول إلى الإعدادات: بعض واجهات برمجة التطبيقات غير متاحة لمجموعة الحسابات عند إضافة المعرِّفات على تطبيق OAuth.</string>
-    <string name="settings_hiring">إنَّنا نوظِّف!</string>
+    <string name="settings_hiring">قم بزيارة موقعنا</string>
     <string name="feature_requests">تمييز الطلب</string>
     <string name="orderdetail_copy_tracking_number">نسخ رقم التعقُّب</string>
     <string name="login_refresh_app_progress">جارٍ التحقُّق من WooCommerce…</string>
@@ -721,7 +721,7 @@ Language: ar
     <string name="settings_third_party_policy_header">سياسة الطرف الثالث</string>
     <string name="settings_cookie_policy_header">سياسة ملفات تعريف الارتباط</string>
     <string name="settings_privacy_policy_header">سياسة الخصوصية</string>
-    <string name="settings_footer">صُنع بحب بواسطة Automattic. %1$s</string>
+    <string name="settings_footer">صُنع بحب بواسطة إينوشوب. %1$s</string>
     <string name="settings_tracking">نستخدم أدوات تعقب أخرى، بما في ذلك بعض الأدوات التي تنتمي إلى أطراف ثالثة. اقرأ عن هذه الأدوات وكيفية التحكم فيها.</string>
     <string name="settings_privacy_policy">قراءة سياسة الخصوصية</string>
     <string name="settings_privacy_detail">تساعدنا هذه المعلومات على تحسين منتجاتنا، وجعل التسويق أكثر ملاءمة لك، وتخصيص تجربة WooCommerce، والمزيد كما يرد بالتفصيل في سياسة الخصوصية لدينا.</string>

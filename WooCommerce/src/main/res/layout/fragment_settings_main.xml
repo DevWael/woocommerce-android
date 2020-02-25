@@ -181,6 +181,7 @@
         <TextView
             style="@style/Woo.Settings.Caption"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:text="@string/settings_about"/>
 
@@ -195,6 +196,7 @@
         <TextView
             android:id="@+id/textLicenses"
             style="@style/Woo.Settings.Label"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_licenses"/>

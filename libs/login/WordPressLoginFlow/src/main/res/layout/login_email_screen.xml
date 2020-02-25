@@ -18,7 +18,6 @@
         android:layout_marginTop="@dimen/margin_extra_large"
         android:layout_width="match_parent"
         android:textAlignment="viewStart"
-        android:visibility="gone"
         android:gravity="start"
         tools:text="@string/enter_email_wordpress_com"
         style="@style/LoginTheme.TextLabel" >
@@ -31,7 +30,6 @@
         android:importantForAutofill="noExcludeDescendants"
         android:inputType="textEmailAddress"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_width="match_parent"
         app:wpIconDrawable="@drawable/ic_user_grey_24dp"
         android:textAlignment="viewStart"
@@ -43,7 +41,6 @@
         style="@style/LoginTheme.TextLabel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:layout_marginTop="@dimen/margin_extra_large"
         android:layout_marginBottom="@dimen/margin_medium"
         android:gravity="center_vertical"

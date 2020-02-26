@@ -42,7 +42,7 @@ android {
     buildToolsVersion '29.0.1'
 
     defaultConfig {
-        applicationId "com.woocommerce.android"
+        applicationId "co.innoshop.android"
         // Allow versionName to be overridden with property. e.g. -PversionName=1234
         if (project.hasProperty("versionName")) {
             versionName project.property("versionName")

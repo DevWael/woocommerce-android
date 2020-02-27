@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    <color name="wc_purple">#CD0934</color>-->
+    <color name="wc_red_splash">#c51e32</color>
     <color name="wc_purple">#CD0934</color>
     <color name="wc_purple_highlight">#8F0C26</color>
     <color name="wc_purple_status">#B4082B</color>

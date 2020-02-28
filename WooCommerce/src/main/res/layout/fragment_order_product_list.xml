@@ -7,7 +7,7 @@
     android:background="@color/default_window_background">
 
     <!-- Product List -->
-    <com.woocommerce.android.ui.orders.OrderDetailProductListView
+    <co.innoshop.android.ui.orders.OrderDetailProductListView
         android:id="@+id/orderProducts_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

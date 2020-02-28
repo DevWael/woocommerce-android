@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboard_refresh_layout"
     android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:orientation="vertical">
 
                 <!-- My Store stats reverted notice card -->
-                <com.woocommerce.android.ui.mystore.MyStoreStatsRevertedNoticeCard
+                <co.innoshop.android.ui.mystore.MyStoreStatsRevertedNoticeCard
                     android:id="@+id/dashboard_stats_reverted_card"
                     style="@style/Woo.Stats.Notice.Card"
                     android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                     tools:visibility="visible" />
 
                 <!-- My Store stats availability notice card -->
-                <com.woocommerce.android.ui.mystore.MyStoreStatsAvailabilityCard
+                <co.innoshop.android.ui.mystore.MyStoreStatsAvailabilityCard
                     android:id="@+id/dashboard_stats_availability_card"
                     style="@style/Woo.Stats.Card.Expandable"
                     android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                     tools:visibility="visible" />
 
                 <!-- Order stats -->
-                <com.woocommerce.android.ui.dashboard.DashboardStatsView
+                <co.innoshop.android.ui.dashboard.DashboardStatsView
                     android:id="@+id/dashboard_stats"
                     style="@style/Woo.Card"
                     android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                     android:orientation="vertical" />
 
                 <!-- Top earner stats -->
-                <com.woocommerce.android.ui.dashboard.DashboardTopEarnersView
+                <co.innoshop.android.ui.dashboard.DashboardTopEarnersView
                     android:id="@+id/dashboard_top_earners"
                     style="@style/Woo.Card"
                     android:layout_width="match_parent"
@@ -68,12 +68,12 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <com.woocommerce.android.widgets.WCEmptyStatsView
+                <co.innoshop.android.widgets.WCEmptyStatsView
                     android:id="@+id/empty_stats_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <com.woocommerce.android.widgets.WCEmptyView
+                <co.innoshop.android.widgets.WCEmptyView
                     android:id="@+id/empty_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
@@ -83,4 +83,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout>
+</co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout>

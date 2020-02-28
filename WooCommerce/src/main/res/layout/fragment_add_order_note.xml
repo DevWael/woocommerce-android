@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/default_window_background"
     android:orientation="vertical"
-    tools:context="com.woocommerce.android.ui.orders.notes.AddOrderNoteFragment">
+    tools:context="co.innoshop.android.ui.orders.notes.AddOrderNoteFragment">
 
     <LinearLayout
         android:id="@+id/addNote_editContainer"
@@ -54,7 +54,7 @@
         android:layout_marginBottom="@dimen/margin_large"
         android:background="@color/list_divider"/>
 
-    <com.woocommerce.android.widgets.WCToggleSingleOptionView
+    <co.innoshop.android.widgets.WCToggleSingleOptionView
         android:id="@+id/addNote_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

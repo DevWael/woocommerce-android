@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.woocommerce.android.widgets.BorderedImageView
+    <co.innoshop.android.widgets.BorderedImageView
         android:id="@+id/productImage"
         android:layout_width="wrap_content"
         android:layout_height="156dp"

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout
+<co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/orderRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.woocommerce.android.ui.orders.OrderDetailFragment">
+    tools:context="co.innoshop.android.ui.orders.OrderDetailFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -26,14 +26,14 @@
                 tools:ignore="UselessParent">
 
                 <!-- Order Status -->
-                <com.woocommerce.android.ui.orders.OrderDetailOrderStatusView
+                <co.innoshop.android.ui.orders.OrderDetailOrderStatusView
                     android:id="@+id/orderDetail_orderStatus"
                     style="@style/Woo.Card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <!-- Order Shipping method warning card -->
-                <com.woocommerce.android.ui.orders.OrderDetailShippingMethodNoticeCard
+                <co.innoshop.android.ui.orders.OrderDetailShippingMethodNoticeCard
                     android:id="@+id/orderDetail_shippingMethodNotice"
                     style="@style/Woo.Card"
                     android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                     tools:visibility="visible" />
 
                 <!-- Product List -->
-                <com.woocommerce.android.ui.orders.OrderDetailProductListView
+                <co.innoshop.android.ui.orders.OrderDetailProductListView
                     android:id="@+id/orderDetail_productList"
                     style="@style/Woo.Card.WithoutPadding"
                     android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:contentDescription="@string/products"/>
 
                 <!-- Refunds Info -->
-                <com.woocommerce.android.ui.orders.RefundsInfoView
+                <co.innoshop.android.ui.orders.RefundsInfoView
                     android:id="@+id/orderDetail_refundsInfo"
                     style="@style/Woo.Card"
                     android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                     android:contentDescription="@string/refunds"/>
 
                 <!-- Payments -->
-                <com.woocommerce.android.ui.orders.OrderDetailPaymentView
+                <co.innoshop.android.ui.orders.OrderDetailPaymentView
                     android:id="@+id/orderDetail_paymentInfo"
                     style="@style/Woo.Card.WithoutPadding"
                     android:layout_width="match_parent"
@@ -71,14 +71,14 @@
                     android:focusable="true"/>
 
                 <!-- Customer Info -->
-                <com.woocommerce.android.ui.orders.OrderDetailCustomerInfoView
+                <co.innoshop.android.ui.orders.OrderDetailCustomerInfoView
                     android:id="@+id/orderDetail_customerInfo"
                     style="@style/Woo.Card.Expandable"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
                 <!-- Shipment Tracking -->
-                <com.woocommerce.android.ui.orders.OrderDetailShipmentTrackingListView
+                <co.innoshop.android.ui.orders.OrderDetailShipmentTrackingListView
                     android:id="@+id/orderDetail_shipmentList"
                     style="@style/Woo.Card.WithoutPadding"
                     android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                     tools:visibility="visible"/>
 
                 <!-- Order Notes -->
-                <com.woocommerce.android.ui.orders.notes.OrderDetailOrderNoteListView
+                <co.innoshop.android.ui.orders.notes.OrderDetailOrderNoteListView
                     android:id="@+id/orderDetail_noteList"
                     style="@style/Woo.Card.WithoutPadding"
                     android:layout_width="match_parent"
@@ -97,4 +97,4 @@
             </LinearLayout>
         </FrameLayout>
     </androidx.core.widget.NestedScrollView>
-</com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout>
+</co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout>

@@ -1,0 +1,827 @@
+package co.innoshop.android.ui.main
+
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.fragment.NavHostFragment
+import co.innoshop.android.AppPrefs
+import co.innoshop.android.BuildConfig
+import co.innoshop.android.NavGraphMainDirections
+import co.innoshop.android.R
+import co.innoshop.android.RequestCodes
+import co.innoshop.android.analytics.AnalyticsTracker
+import co.innoshop.android.analytics.AnalyticsTracker.Stat
+import co.innoshop.android.extensions.WooNotificationType.NEW_ORDER
+import co.innoshop.android.extensions.WooNotificationType.PRODUCT_REVIEW
+import co.innoshop.android.extensions.active
+import co.innoshop.android.extensions.getCommentId
+import co.innoshop.android.extensions.getRemoteOrderId
+import co.innoshop.android.extensions.getWooType
+import co.innoshop.android.push.NotificationHandler
+import co.innoshop.android.support.HelpActivity
+import co.innoshop.android.support.HelpActivity.Origin
+import co.innoshop.android.tools.SelectedSite
+import co.innoshop.android.ui.base.TopLevelFragment
+import co.innoshop.android.ui.base.UIMessageResolver
+import co.innoshop.android.ui.dashboard.DashboardFragment
+import co.innoshop.android.ui.login.LoginActivity
+import co.innoshop.android.ui.main.BottomNavigationPosition.DASHBOARD
+import co.innoshop.android.ui.main.BottomNavigationPosition.ORDERS
+import co.innoshop.android.ui.main.BottomNavigationPosition.PRODUCTS
+import co.innoshop.android.ui.main.BottomNavigationPosition.REVIEWS
+import co.innoshop.android.ui.mystore.MyStoreFragment
+import co.innoshop.android.ui.mystore.RevenueStatsAvailabilityFetcher
+import co.innoshop.android.ui.orders.OrderDetailFragmentDirections
+import co.innoshop.android.ui.orders.list.OrderListFragment
+import co.innoshop.android.ui.prefs.AppSettingsActivity
+import co.innoshop.android.ui.reviews.ReviewDetailFragmentDirections
+import co.innoshop.android.ui.sitepicker.SitePickerActivity
+import co.innoshop.android.util.WooAnimUtils
+import co.innoshop.android.util.WooAnimUtils.Duration
+import co.innoshop.android.widgets.AppRatingDialog
+import co.innoshop.android.widgets.WCPromoDialog
+import co.innoshop.android.widgets.WCPromoDialog.PromoButton
+import co.innoshop.android.widgets.WCPromoTooltip
+import co.innoshop.android.widgets.WCPromoTooltip.Feature
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import kotlinx.android.synthetic.main.activity_main.*
+import org.wordpress.android.fluxc.model.SiteModel
+import org.wordpress.android.fluxc.model.order.OrderIdentifier
+import org.wordpress.android.login.LoginAnalyticsListener
+import org.wordpress.android.login.LoginMode
+import org.wordpress.android.util.NetworkUtils
+import javax.inject.Inject
+
+class MainActivity : AppUpgradeActivity(),
+        MainContract.View,
+        HasAndroidInjector,
+        MainNavigationRouter,
+        MainBottomNavigationView.MainNavigationListener,
+        NavController.OnDestinationChangedListener,
+        WCPromoDialog.PromoDialogListener {
+    companion object {
+        private const val MAGIC_LOGIN = "magic-login"
+        private const val TOKEN_PARAMETER = "token"
+
+        private const val KEY_BOTTOM_NAV_POSITION = "key-bottom-nav-position"
+        private const val KEY_UNFILLED_ORDER_COUNT = "unfilled-order-count"
+
+        // push notification-related constants
+        const val FIELD_OPENED_FROM_PUSH = "opened-from-push-notification"
+        const val FIELD_REMOTE_NOTE_ID = "remote-note-id"
+        const val FIELD_OPENED_FROM_PUSH_GROUP = "opened-from-push-group"
+        const val FIELD_OPENED_FROM_ZENDESK = "opened-from-zendesk"
+
+        interface BackPressListener {
+            fun onRequestAllowBackPress(): Boolean
+        }
+
+        init {
+            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        }
+    }
+
+    interface NavigationResult {
+        fun onNavigationResult(requestCode: Int, result: Bundle)
+    }
+
+    @Inject lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject lateinit var presenter: MainContract.Presenter
+    @Inject lateinit var loginAnalyticsListener: LoginAnalyticsListener
+    @Inject lateinit var selectedSite: SelectedSite
+    @Inject lateinit var uiMessageResolver: UIMessageResolver
+    @Inject lateinit var revenueStatsAvailabilityFetcher: RevenueStatsAvailabilityFetcher
+
+    private var isBottomNavShowing = true
+    private var previousDestinationId: Int? = null
+    private var unfilledOrderCount: Int = 0
+
+    private lateinit var bottomNavView: MainBottomNavigationView
+    private lateinit var navController: NavController
+
+    // TODO: Using deprecated ProgressDialog temporarily - a proper post-login experience will replace this
+    private var progressDialog: ProgressDialog? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Set the toolbar
+        setSupportActionBar(toolbar as Toolbar)
+
+        presenter.takeView(this)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment
+        navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener(this)
+
+        bottomNavView = bottom_nav.also { it.init(supportFragmentManager, this) }
+
+        // Verify authenticated session
+        if (!presenter.userIsLoggedIn()) {
+            showLoginScreen()
+            return
+        }
+
+        // fetch the site list if the database has been downgraded - otherwise the site picker will be displayed,
+        // which we don't want in this situation
+        if (AppPrefs.getDatabaseDowngraded()) {
+            presenter.fetchSitesAfterDowngrade()
+            AppPrefs.setDatabaseDowngraded(false)
+            return
+        }
+
+        if (!selectedSite.exists()) {
+            showSitePickerScreen()
+            return
+        }
+
+        // we only have to check the new revenue stats availability
+        // if the activity is starting for the first time
+        if (savedInstanceState == null) {
+            fetchRevenueStatsAvailability(selectedSite.get())
+        }
+
+        initFragment(savedInstanceState)
+
+        // show the app rating dialog if it's time
+        AppRatingDialog.showIfNeeded(this)
+
+        // check for any new app updates only after the user has logged into the app (release builds only)
+        if (!co.innoshop.android.BuildConfig.DEBUG) {
+            checkForAppUpdates()
+        }
+    }
+
+    override fun hideProgressDialog() {
+        progressDialog?.apply { if (isShowing) { cancel() } }
+    }
+
+    override fun showProgressDialog(@StringRes stringId: Int) {
+        hideProgressDialog()
+        progressDialog = ProgressDialog.show(this, "", getString(stringId), true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        // don't show the options menu unless we're at the root
+        if (isAtNavigationRoot()) {
+            menuInflater.inflate(R.menu.menu_action_bar, menu)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AnalyticsTracker.trackViewShown(this)
+
+        updateReviewsBadge()
+        updateOrderBadge(false)
+
+        checkConnection()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        setIntent(intent)
+        initFragment(null)
+    }
+
+    public override fun onDestroy() {
+        presenter.dropView()
+        super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(KEY_BOTTOM_NAV_POSITION, bottomNavView.currentPosition.id)
+        outState.putInt(KEY_UNFILLED_ORDER_COUNT, unfilledOrderCount)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun restoreSavedInstanceState(savedInstanceState: Bundle) {
+        savedInstanceState.also {
+            val id = it.getInt(KEY_BOTTOM_NAV_POSITION, DASHBOARD.id)
+            bottomNavView.restoreSelectedItemState(id)
+
+            val count = it.getInt(KEY_UNFILLED_ORDER_COUNT)
+            if (count > 0) {
+                showOrderBadge(count)
+            }
+        }
+    }
+
+    override fun onBackPressed() {
+        AnalyticsTracker.trackBackPressed(this)
+
+        if (!isAtNavigationRoot()) {
+            // go no further if active fragment doesn't allow back press - we use this so fragments can
+            // provide confirmation before discarding the current action, such as adding an order note
+            getActiveChildFragment()?.let { fragment ->
+                if (fragment is BackPressListener && !(fragment as BackPressListener).onRequestAllowBackPress()) {
+                    return
+                }
+            }
+            navController.navigateUp()
+            return
+        }
+
+        // if we're not on the dashboard make it active, otherwise allow the OS to leave the app
+        if (bottomNavView.currentPosition != DASHBOARD) {
+            bottomNavView.currentPosition = DASHBOARD
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    /**
+     * Returns true if the navigation controller is showing the root fragment (ie: a top level fragment is showing)
+     */
+    override fun isAtNavigationRoot(): Boolean {
+        return if (::navController.isInitialized) {
+            navController.currentDestination?.id == R.id.rootFragment
+        } else {
+            true
+        }
+    }
+
+    /**
+     * Return true if one of the nav component fragments is showing (the opposite of the above)
+     */
+    override fun isChildFragmentShowing() = !isAtNavigationRoot()
+
+    /**
+     * Navigates to the root fragment so only the top level fragment is showing
+     */
+    private fun navigateToRoot() {
+        if (!isAtNavigationRoot()) {
+            navController.popBackStack(R.id.rootFragment, false)
+        }
+    }
+
+    /**
+     * Returns the current top level fragment (ie: the one showing in the bottom nav)
+     */
+    private fun getActiveTopLevelFragment(): TopLevelFragment? {
+        val tag = bottomNavView.currentPosition.getTag()
+        return supportFragmentManager.findFragmentByTag(tag) as? TopLevelFragment
+    }
+
+    /**
+     * Returns the fragment currently shown by the navigation component, or null if we're at the root
+     */
+    private fun getActiveChildFragment(): Fragment? {
+        return if (isChildFragmentShowing()) {
+            val navHostFragment = supportFragmentManager.primaryNavigationFragment
+            navHostFragment?.childFragmentManager?.fragments?.get(0)
+        } else {
+            null
+        }
+    }
+
+    /**
+     * The current fragment in the nav controller has changed
+     */
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
+        val isAtRoot = isAtNavigationRoot()
+
+        // go no further if this is the initial navigation to the root fragment
+        if (isAtRoot && previousDestinationId == null) {
+            previousDestinationId = destination.id
+            return
+        }
+
+        // show/hide the top level fragment container depending on whether we're at the root
+        if (isAtRoot) {
+            container.visibility = View.VISIBLE
+        } else {
+            container.visibility = View.INVISIBLE
+        }
+
+        // make sure the correct up icon appears
+        val showUpIcon: Boolean
+        val showCrossIcon: Boolean
+        val showBottomNav: Boolean
+        val showToolbarShadow: Boolean
+        if (isAtRoot) {
+            showUpIcon = false
+            showCrossIcon = false
+            showBottomNav = true
+            showToolbarShadow = true
+        } else {
+            showUpIcon = true
+            showCrossIcon = when (destination.id) {
+                R.id.productDetailFragment,
+                R.id.productShippingClassFragment,
+                R.id.issueRefundFragment,
+                R.id.addOrderShipmentTrackingFragment,
+                R.id.addOrderNoteFragment -> {
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+            showBottomNav = when (destination.id) {
+                R.id.addOrderShipmentTrackingFragment,
+                R.id.addOrderNoteFragment,
+                R.id.issueRefundFragment,
+                R.id.refundAmountDialog,
+                R.id.refundConfirmationDialog,
+                R.id.refundItemsPickerDialog,
+                R.id.refundSummaryFragment -> {
+                    false
+                }
+                else -> {
+                    true
+                }
+            }
+            showToolbarShadow = when (destination.id) {
+                R.id.issueRefundFragment -> false
+                else -> true
+            }
+        }
+        supportActionBar?.let { actionBar ->
+            actionBar.setDisplayHomeAsUpEnabled(showUpIcon)
+            @DrawableRes val icon = if (showCrossIcon) {
+                R.drawable.ic_gridicons_cross_white_24dp
+            } else {
+                R.drawable.ic_back_white_24dp
+            }
+            actionBar.setHomeAsUpIndicator(icon)
+
+            if (showToolbarShadow) {
+                actionBar.elevation = resources.getDimension(R.dimen.appbar_elevation)
+            } else {
+                actionBar.elevation = 0f
+            }
+        }
+
+        if (showBottomNav) {
+            showBottomNav()
+        } else {
+            hideBottomNav()
+        }
+
+        if (isAtRoot) {
+            getActiveTopLevelFragment()?.let {
+                it.updateActivityTitle()
+                it.onReturnedFromChildFragment()
+            }
+        }
+
+        previousDestinationId = destination.id
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item!!.itemId) {
+            // User clicked the "up" button in the action bar
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            // User selected the settings menu option
+            R.id.menu_settings -> {
+                showSettingsScreen()
+                AnalyticsTracker.track(Stat.MAIN_MENU_SETTINGS_TAPPED)
+                true
+            }
+            R.id.menu_support -> {
+                showHelpAndSupport()
+                AnalyticsTracker.track(Stat.MAIN_MENU_CONTACT_SUPPORT_TAPPED)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            RequestCodes.ADD_ACCOUNT -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Launch next screen
+                }
+                return
+            }
+            RequestCodes.SETTINGS -> {
+                // restart the activity if the user returned from settings and they switched sites
+                if (resultCode == AppSettingsActivity.RESULT_CODE_SITE_CHANGED) {
+                    presenter.selectedSiteChanged(selectedSite.get())
+                    restart()
+                }
+
+                // beta features have changed. Restart activity for changes to take effect
+                if (resultCode == AppSettingsActivity.RESULT_CODE_BETA_OPTIONS_CHANGED) {
+                    restart()
+                }
+                return
+            }
+        }
+    }
+
+    override fun notifyTokenUpdated() {
+        if (hasMagicLinkLoginIntent()) {
+            loginAnalyticsListener.trackLoginMagicLinkSucceeded()
+        }
+    }
+
+    override fun showLoginScreen() {
+        selectedSite.reset()
+        val intent = Intent(this, LoginActivity::class.java)
+        LoginMode.WOO_LOGIN_MODE.putInto(intent)
+        startActivityForResult(intent, RequestCodes.ADD_ACCOUNT)
+        finish()
+    }
+
+    /**
+     * displays the site picker activity and finishes this activity
+     */
+    override fun showSitePickerScreen() {
+        SitePickerActivity.showSitePickerFromLogin(this)
+        finish()
+    }
+
+    override fun showSettingsScreen() {
+        val intent = Intent(this, AppSettingsActivity::class.java)
+        startActivityForResult(intent, RequestCodes.SETTINGS)
+    }
+
+    override fun showHelpAndSupport() {
+        startActivity(HelpActivity.createIntent(this, Origin.MAIN_ACTIVITY, null))
+    }
+
+    override fun updateSelectedSite() {
+        hideProgressDialog()
+
+        if (!selectedSite.exists()) {
+            showSitePickerScreen()
+            return
+        }
+
+        // Complete UI initialization
+
+        bottomNavView.init(supportFragmentManager, this)
+        initFragment(null)
+    }
+
+    /**
+     * Called when the user switches sites - restarts the activity so all fragments and child fragments are reset
+     */
+    private fun restart() {
+        val intent = intent
+        intent.addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_NO_ANIMATION
+        )
+        finish()
+        startActivity(intent)
+    }
+
+    private fun hasMagicLinkLoginIntent(): Boolean {
+        val action = intent.action
+        val uri = intent.data
+        val host = uri?.host?.let { it } ?: ""
+        return Intent.ACTION_VIEW == action && host.contains(MAGIC_LOGIN)
+    }
+
+    private fun getAuthTokenFromIntent(): String? {
+        val uri = intent.data
+        return uri?.getQueryParameter(TOKEN_PARAMETER)
+    }
+
+    // region Bottom Navigation
+    override fun updateReviewsBadge() {
+        if (AppPrefs.getHasUnseenReviews()) {
+            showReviewsBadge()
+        } else {
+            hideReviewsBadge()
+        }
+    }
+
+    override fun hideReviewsBadge() {
+        bottomNavView.showReviewsBadge(false)
+        NotificationHandler.removeAllReviewNotifsFromSystemBar(this)
+    }
+
+    override fun showReviewsBadge() {
+        bottomNavView.showReviewsBadge(true)
+    }
+
+    override fun updateOrderBadge(hideCountUntilComplete: Boolean) {
+        if (hideCountUntilComplete) {
+            bottomNavView.hideOrderBadgeCount()
+        }
+        presenter.fetchUnfilledOrderCount()
+    }
+
+    override fun showOrderBadge(count: Int) {
+        unfilledOrderCount = count
+        bottomNavView.showOrderBadge(count)
+    }
+
+    override fun hideOrderBadge() {
+        unfilledOrderCount = 0
+        bottomNavView.hideOrderBadge()
+    }
+
+    override fun fetchRevenueStatsAvailability(site: SiteModel) {
+        revenueStatsAvailabilityFetcher.fetchRevenueStatsAvailability(site)
+    }
+
+    /**
+     * Method to update the `My Store` TAB based on the revenue stats availability
+     *
+     * if revenue stats v4 support is available but we are currently displaying the v3 stats UI,
+     * display a banner to the user with the option to unload the v3 UI and display the new stats UI
+     *
+     * if revenue stats v4 support is NOT available but we are currently displaying the v4 stats UI,
+     * display a banner [co.innoshop.android.ui.mystore.MyStoreStatsRevertedNoticeCard]
+     * to the user after unloading the v4 UI and displaying the old stats UI
+     */
+    override fun updateStatsView(isAvailable: Boolean) {
+        val fragment = bottomNavView.getFragment(DASHBOARD)
+        val isEnabled = isAvailable && AppPrefs.isV4StatsUISupported()
+        when (fragment.tag) {
+            DashboardFragment.TAG -> {
+                if (isEnabled) {
+                    // display the new stats UI only if user has opted in
+                    replaceStatsFragment()
+                } else if (isAvailable) {
+                    // if the new stats UI is not enabled but the user has not opted out of it,
+                    // display the new stats availability banner
+                    (fragment as? DashboardFragment)?.showV4StatsAvailabilityBanner(
+                            AppPrefs.shouldDisplayV4StatsAvailabilityBanner()
+                    )
+                }
+            }
+            MyStoreFragment.TAG -> {
+                // if new stats UI was enabled but is no longer enabled, display revert banner
+                // and replace the new stats UI with the old UI
+                if (!isEnabled) {
+                    AppPrefs.setShouldDisplayV4StatsRevertedBanner(true)
+                    replaceStatsFragment()
+                }
+            }
+        }
+    }
+
+    override fun replaceStatsFragment() {
+        bottomNavView.replaceStatsFragment()
+    }
+
+    override fun onNavItemSelected(navPos: BottomNavigationPosition) {
+        val stat = when (navPos) {
+            DASHBOARD -> Stat.MAIN_TAB_DASHBOARD_SELECTED
+            ORDERS -> Stat.MAIN_TAB_ORDERS_SELECTED
+            PRODUCTS -> Stat.MAIN_TAB_PRODUCTS_SELECTED
+            REVIEWS -> Stat.MAIN_TAB_NOTIFICATIONS_SELECTED
+        }
+        AnalyticsTracker.track(stat)
+
+        // if were not at the root, clear the nav controller's backstack
+        if (!isAtNavigationRoot()) {
+            navigateToRoot()
+        }
+
+        if (navPos == REVIEWS) {
+            NotificationHandler.removeAllReviewNotifsFromSystemBar(this)
+        } else if (navPos == ORDERS) {
+            NotificationHandler.removeAllOrderNotifsFromSystemBar(this)
+        }
+    }
+
+    override fun onNavItemReselected(navPos: BottomNavigationPosition) {
+        val stat = when (navPos) {
+            DASHBOARD -> Stat.MAIN_TAB_DASHBOARD_RESELECTED
+            ORDERS -> Stat.MAIN_TAB_ORDERS_RESELECTED
+            PRODUCTS -> Stat.MAIN_TAB_PRODUCTS_RESELECTED
+            REVIEWS -> Stat.MAIN_TAB_NOTIFICATIONS_RESELECTED
+        }
+        AnalyticsTracker.track(stat)
+
+        // if we're at the root scroll the active fragment to the top, otherwise clear the nav backstack
+        if (isAtNavigationRoot()) {
+            getActiveTopLevelFragment()?.scrollToTop()
+        } else {
+            navigateToRoot()
+        }
+    }
+    // endregion
+
+    // region Fragment Processing
+    private fun initFragment(savedInstanceState: Bundle?) {
+        val openedFromPush = intent.getBooleanExtra(FIELD_OPENED_FROM_PUSH, false)
+
+        if (savedInstanceState != null) {
+            restoreSavedInstanceState(savedInstanceState)
+        } else if (openedFromPush) {
+            // Opened from a push notification
+            //
+            // Reset this flag now that it's being processed
+            intent.removeExtra(FIELD_OPENED_FROM_PUSH)
+
+            if (intent.getBooleanExtra(FIELD_OPENED_FROM_PUSH_GROUP, false)) {
+                // Reset this flag now that it's being processed
+                intent.removeExtra(FIELD_OPENED_FROM_PUSH_GROUP)
+
+                // Send analytics for viewing all notifications
+                NotificationHandler.bumpPushNotificationsTappedAllAnalytics(this)
+
+                // Clear unread messages from the system bar
+                NotificationHandler.removeAllNotificationsFromSystemBar(this)
+
+                // User clicked on a group of notifications. Just show the notifications tab.
+                bottomNavView.currentPosition = REVIEWS
+            } else if (intent.getBooleanExtra(FIELD_OPENED_FROM_ZENDESK, false)) {
+                // Reset this flag now that it's being processed
+                intent.removeExtra(FIELD_OPENED_FROM_ZENDESK)
+
+                // Send track event for the zendesk notification id
+                val remoteNoteId = intent.getIntExtra(FIELD_REMOTE_NOTE_ID, 0)
+                NotificationHandler.bumpPushNotificationsTappedAnalytics(this, remoteNoteId.toString())
+
+                // Remove single notification from the system bar
+                NotificationHandler.removeNotificationWithNoteIdFromSystemBar(this, remoteNoteId.toString())
+
+                // leave the Main activity showing the Dashboard tab, so when the user comes back from Help & Support,
+                // the app is in the right section
+                bottomNavView.currentPosition = DASHBOARD
+
+                // launch 'Tickets' page of Zendesk
+                startActivity(HelpActivity.createIntent(this, Origin.ZENDESK_NOTIFICATION, null))
+            } else {
+                // Check for a notification ID - if one is present, open notification
+                val remoteNoteId = intent.getLongExtra(FIELD_REMOTE_NOTE_ID, 0)
+                if (remoteNoteId > 0) {
+                    // Send track event
+                    NotificationHandler.bumpPushNotificationsTappedAnalytics(this, remoteNoteId.toString())
+
+                    // Remove single notification from the system bar
+                    NotificationHandler.removeNotificationWithNoteIdFromSystemBar(this, remoteNoteId.toString())
+
+                    showNotificationDetail(remoteNoteId)
+                } else {
+                    // Send analytics for viewing all notifications
+                    NotificationHandler.bumpPushNotificationsTappedAllAnalytics(this)
+
+                    // Clear unread messages from the system bar
+                    NotificationHandler.removeAllNotificationsFromSystemBar(this)
+
+                    // Just open the notifications tab
+                    bottomNavView.currentPosition = REVIEWS
+                }
+            }
+        } else {
+            bottomNavView.currentPosition = DASHBOARD
+        }
+    }
+    // endregion
+
+    override fun showOrderList(orderStatusFilter: String?) {
+        showBottomNav()
+        bottomNavView.updatePositionAndDeferInit(ORDERS)
+
+        val fragment = bottomNavView.getFragment(ORDERS)
+        (fragment as OrderListFragment).onOrderStatusSelected(orderStatusFilter)
+    }
+
+    override fun showNotificationDetail(remoteNoteId: Long) {
+        showBottomNav()
+
+        (presenter.getNotificationByRemoteNoteId(remoteNoteId))?.let { note ->
+            when (note.getWooType()) {
+                NEW_ORDER -> {
+                    selectedSite.getIfExists()?.let { site ->
+                        note.getRemoteOrderId()?.let { orderId ->
+                            showOrderDetail(site.id, orderId, note.remoteNoteId)
+                        }
+                    }
+                }
+                PRODUCT_REVIEW -> showReviewDetail(note.getCommentId(), true)
+                else -> { /* do nothing */ }
+            }
+        }
+    }
+
+    override fun showProductDetail(remoteProductId: Long) {
+        showBottomNav()
+        val action = co.innoshop.android.NavGraphMainDirections.actionGlobalProductDetailFragment(remoteProductId)
+        navController.navigate(action)
+    }
+
+    override fun showReviewDetail(remoteReviewId: Long, launchedFromNotification: Boolean, tempStatus: String?) {
+        showBottomNav()
+        bottomNavView.currentPosition = REVIEWS
+
+        val navPos = REVIEWS.position
+        bottom_nav.active(navPos)
+
+        val action = co.innoshop.android.ui.reviews.ReviewDetailFragmentDirections.actionGlobalReviewDetailFragment(
+                remoteReviewId,
+                tempStatus,
+                launchedFromNotification)
+        navController.navigate(action)
+    }
+
+    override fun showOrderDetail(localSiteId: Int, remoteOrderId: Long, remoteNoteId: Long, markComplete: Boolean) {
+        if (bottomNavView.currentPosition != ORDERS) {
+            bottomNavView.currentPosition = ORDERS
+            val navPos = ORDERS.position
+            bottom_nav.active(navPos)
+        }
+
+        if (markComplete) {
+            // if we're marking the order as complete, we need to inclusively pop the backstack to the existing order
+            // detail fragment and then show a new one
+            navController.popBackStack(R.id.orderDetailFragment, true)
+
+            // immediately update the order badge to reflect the change
+            if (unfilledOrderCount > 0) {
+                showOrderBadge(unfilledOrderCount - 1)
+            }
+        }
+
+        val orderId = OrderIdentifier(localSiteId, remoteOrderId)
+        val action = co.innoshop.android.ui.orders.OrderDetailFragmentDirections.actionGlobalOrderDetailFragment(orderId, remoteNoteId, markComplete)
+        navController.navigate(action)
+    }
+
+    override fun updateOfflineStatusBar(isConnected: Boolean) {
+        if (isConnected) offline_bar.hide() else offline_bar.show()
+    }
+
+    private fun checkConnection() {
+        updateOfflineStatusBar(NetworkUtils.isNetworkAvailable(this))
+    }
+
+    override fun hideBottomNav() {
+        if (isBottomNavShowing) {
+            isBottomNavShowing = false
+            WooAnimUtils.animateBottomBar(bottom_nav, false, Duration.MEDIUM)
+        }
+    }
+
+    override fun showBottomNav() {
+        if (!isBottomNavShowing) {
+            isBottomNavShowing = true
+            WooAnimUtils.animateBottomBar(bottom_nav, true, Duration.SHORT)
+        }
+    }
+
+    /**
+     * User tapped a button in WCPromoDialogFragment
+     */
+    override fun onPromoButtonClicked(promoButton: PromoButton) {
+        when (promoButton) {
+            PromoButton.SITE_PICKER_TRY_IT -> {
+                WCPromoTooltip.setTooltipShown(this, Feature.SITE_SWITCHER, false)
+                showSettingsScreen()
+            } else -> {}
+        }
+    }
+
+    /**
+     * The Flexible in app update is successful.
+     * Display a success snack bar and ask users to manually restart the app
+     */
+    override fun showAppUpdateSuccessSnack(actionListener: View.OnClickListener) {
+        uiMessageResolver.getRestartSnack(
+                stringResId = R.string.update_downloaded,
+                actionListener = actionListener)
+                .show()
+    }
+
+    /**
+     * The Flexible in app update was not successful.
+     * Display a failure snack bar and ask users to retry
+     */
+    override fun showAppUpdateFailedSnack(actionListener: View.OnClickListener) {
+        uiMessageResolver.getRetrySnack(R.string.update_failed,
+                actionListener = actionListener)
+                .show()
+    }
+}

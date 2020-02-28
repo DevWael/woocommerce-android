@@ -5,7 +5,7 @@
     android:id="@+id/dashboardStats_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.woocommerce.android.ui.mystore.MyStoreFragment">
+    tools:context="co.innoshop.android.ui.mystore.MyStoreFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -28,7 +28,7 @@
         android:background="@color/default_window_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout
+        <co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout
             android:id="@+id/dashboard_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -45,14 +45,14 @@
                     android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical">
 
-                    <com.woocommerce.android.widgets.WCEmptyStatsView
+                    <co.innoshop.android.widgets.WCEmptyStatsView
                         android:id="@+id/empty_stats_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:visibility="gone"
                         tools:visibility="visible" />
 
-                    <com.woocommerce.android.widgets.WCEmptyView
+                    <co.innoshop.android.widgets.WCEmptyView
                         android:id="@+id/empty_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -60,7 +60,7 @@
                         tools:visibility="visible" />
 
                     <!-- Date bar -->
-                    <com.woocommerce.android.ui.mystore.MyStoreDateRangeView
+                    <co.innoshop.android.ui.mystore.MyStoreDateRangeView
                         android:id="@+id/my_store_date_bar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                         android:orientation="vertical" />
 
                     <!-- Order stats -->
-                    <com.woocommerce.android.ui.mystore.MyStoreStatsView
+                    <co.innoshop.android.ui.mystore.MyStoreStatsView
                         android:id="@+id/my_store_stats"
                         style="@style/Woo.Stats.Card"
                         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                         android:orientation="vertical" />
 
                     <!-- Top earner stats -->
-                    <com.woocommerce.android.ui.mystore.MyStoreTopEarnersView
+                    <co.innoshop.android.ui.mystore.MyStoreTopEarnersView
                         android:id="@+id/my_store_top_earners"
                         style="@style/Woo.Stats.Card"
                         android:layout_width="match_parent"
@@ -85,7 +85,7 @@
 
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
-        </com.woocommerce.android.widgets.ScrollChildSwipeRefreshLayout>
+        </co.innoshop.android.widgets.ScrollChildSwipeRefreshLayout>
 
     </FrameLayout>
 

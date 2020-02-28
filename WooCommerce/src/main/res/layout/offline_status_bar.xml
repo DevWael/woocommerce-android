@@ -5,7 +5,7 @@
     style="@style/Woo.StatusBar.Background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <com.woocommerce.android.widgets.WCTextViewCompat
+    <co.innoshop.android.widgets.WCTextViewCompat
         style="@style/Woo.StatusBar.Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/settings_notifs"/>
 
-            <com.woocommerce.android.widgets.WCToggleSingleOptionView
+            <co.innoshop.android.widgets.WCToggleSingleOptionView
                 android:id="@+id/switchNotifsOrders"
                 style="@style/Woo.Settings.Label"
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 app:switchSummary="@string/settings_notifs_orders_detail"
                 app:switchTitle="@string/settings_notifs_orders"/>
 
-            <com.woocommerce.android.widgets.WCToggleSingleOptionView
+            <co.innoshop.android.widgets.WCToggleSingleOptionView
                 android:id="@+id/switchNotifsTone"
                 style="@style/Woo.Settings.Label"
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 app:switchSummary="@string/settings_notifs_tone_detail"
                 app:switchTitle="@string/settings_notifs_tone"/>
 
-            <com.woocommerce.android.widgets.WCToggleSingleOptionView
+            <co.innoshop.android.widgets.WCToggleSingleOptionView
                 android:id="@+id/switchNotifsReviews"
                 style="@style/Woo.Settings.Label"
                 android:layout_width="match_parent"
@@ -130,7 +130,7 @@
         <!--
             Image Optimization
         -->
-        <com.woocommerce.android.widgets.WCToggleSingleOptionView
+        <co.innoshop.android.widgets.WCToggleSingleOptionView
             android:id="@+id/switchImageOptimizaton"
             style="@style/Woo.Settings.Label"
             android:layout_width="match_parent"

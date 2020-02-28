@@ -5,7 +5,7 @@
                                                    android:id="@+id/snack_root"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent"
-                                                   tools:context="com.woocommerce.android.ui.orders.AddOrderTrackingProviderListFragment">
+                                                   tools:context="co.innoshop.android.ui.orders.AddOrderTrackingProviderListFragment">
 
     <include
         android:id="@+id/toolbar"

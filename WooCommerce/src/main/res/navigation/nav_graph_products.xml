@@ -6,7 +6,7 @@
     app:startDestination="@id/productDetailFragment">
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.woocommerce.android.ui.products.ProductDetailFragment"
+        android:name="co.innoshop.android.ui.products.ProductDetailFragment"
         tools:layout="@layout/fragment_product_detail">
         <argument
             android:name="remoteProductId"
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/productImagesFragment"
-        android:name="com.woocommerce.android.ui.products.ProductImagesFragment"
+        android:name="co.innoshop.android.ui.products.ProductImagesFragment"
         android:label="ProductImagesFragment"
         tools:layout="@layout/fragment_product_images">
         <argument
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/productVariantsFragment"
-        android:name="com.woocommerce.android.ui.products.ProductVariantsFragment"
+        android:name="co.innoshop.android.ui.products.ProductVariantsFragment"
         tools:layout="@layout/fragment_product_variants">
         <argument
             android:name="remoteProductId"
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/aztecEditorFragment"
-        android:name="com.woocommerce.android.ui.aztec.AztecEditorFragment"
+        android:name="co.innoshop.android.ui.aztec.AztecEditorFragment"
         tools:layout="@layout/fragment_aztec_editor">
         <argument
             android:name="aztecText"
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/productInventoryFragment"
-        android:name="com.woocommerce.android.ui.products.ProductInventoryFragment"
+        android:name="co.innoshop.android.ui.products.ProductInventoryFragment"
         tools:layout="@layout/fragment_product_inventory">
     <argument
         android:name="remoteProductId"
@@ -81,7 +81,7 @@
     </fragment>
     <fragment
         android:id="@+id/productShippingFragment"
-        android:name="com.woocommerce.android.ui.products.ProductShippingFragment"
+        android:name="co.innoshop.android.ui.products.ProductShippingFragment"
         tools:layout="@layout/fragment_product_shipping">
         <argument
             android:name="remoteProductId"
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/productShippingClassFragment"
-        android:name="com.woocommerce.android.ui.products.ProductShippingClassFragment"
+        android:name="co.innoshop.android.ui.products.ProductShippingClassFragment"
         android:label="ProductShippingClassFragment">
         <argument
             android:name="shippingClassSlug"

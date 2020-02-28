@@ -1,0 +1,39 @@
+package co.innoshop.android.ui.login
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
+import co.innoshop.android.di.ViewModelAssistedFactory
+import co.innoshop.android.util.CoroutineDispatchers
+import co.innoshop.android.viewmodel.SavedStateWithArgs
+import co.innoshop.android.viewmodel.ScopedViewModel
+import kotlinx.coroutines.launch
+
+class LoginNoJetpackViewModel @AssistedInject constructor(
+    @Assisted savedState: SavedStateWithArgs,
+    dispatchers: CoroutineDispatchers,
+    private val loginNoJetpackRepository: LoginNoJetpackRepository
+) : ScopedViewModel(savedState, dispatchers) {
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _isJetpackAvailable = MutableLiveData<Boolean>()
+    val isJetpackAvailable: LiveData<Boolean> = _isJetpackAvailable
+
+    fun verifyJetpackAvailable(siteAddress: String) {
+        launch {
+            _isLoading.value = true
+            _isJetpackAvailable.value = loginNoJetpackRepository.verifyJetpackAvailable(siteAddress)
+            _isLoading.value = false
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        loginNoJetpackRepository.onCleanup()
+    }
+
+    @AssistedInject.Factory
+    interface Factory : ViewModelAssistedFactory<LoginNoJetpackViewModel>
+}

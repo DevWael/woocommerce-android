@@ -1,4 +1,4 @@
-package com.woocommerce.android.di
+package co.innoshop.android.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 

@@ -17,7 +17,7 @@
         android:paddingBottom="@dimen/card_padding_bottom">
 
         <!-- Product SKU -->
-        <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+        <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
             android:id="@+id/product_sku"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             app:layout_constraintTop_toBottomOf="@+id/product_sku" />
 
         <!-- Product Stock Status -->
-        <com.woocommerce.android.widgets.WCMaterialOutlinedSpinnerView
+        <co.innoshop.android.widgets.WCMaterialOutlinedSpinnerView
             android:id="@+id/edit_product_stock_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/manageStock_switch"
             tools:visibility="visible">
 
-            <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+            <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
                 android:id="@+id/product_stock_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Product Stock Status -->
-            <com.woocommerce.android.widgets.WCMaterialOutlinedSpinnerView
+            <co.innoshop.android.widgets.WCMaterialOutlinedSpinnerView
                 android:id="@+id/edit_product_backorders"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

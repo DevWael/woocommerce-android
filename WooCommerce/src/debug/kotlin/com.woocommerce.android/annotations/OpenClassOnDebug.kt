@@ -1,4 +1,4 @@
-package com.woocommerce.android.annotations
+package co.innoshop.android.annotations
 
 @OpenClass
 @Target(AnnotationTarget.CLASS)

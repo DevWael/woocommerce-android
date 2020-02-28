@@ -6,11 +6,11 @@
     app:startDestination="@id/rootFragment">
     <fragment
         android:id="@+id/rootFragment"
-        android:name="com.woocommerce.android.ui.main.RootFragment"
+        android:name="co.innoshop.android.ui.main.RootFragment"
         tools:layout="@layout/fragment_root" />
     <fragment
         android:id="@+id/orderDetailFragment"
-        android:name="com.woocommerce.android.ui.orders.OrderDetailFragment"
+        android:name="co.innoshop.android.ui.orders.OrderDetailFragment"
         tools:layout="@layout/fragment_order_detail">
         <argument
             android:name="orderId"
@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/addOrderNoteFragment"
-        android:name="com.woocommerce.android.ui.orders.notes.AddOrderNoteFragment"
+        android:name="co.innoshop.android.ui.orders.notes.AddOrderNoteFragment"
         tools:layout="@layout/fragment_add_order_note">
         <argument
             android:name="orderId"
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderFulfillmentFragment"
-        android:name="com.woocommerce.android.ui.orders.OrderFulfillmentFragment"
+        android:name="co.innoshop.android.ui.orders.OrderFulfillmentFragment"
         tools:layout="@layout/fragment_order_fulfillment">
         <argument
             android:name="orderId"
@@ -97,7 +97,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderProductListFragment"
-        android:name="com.woocommerce.android.ui.orders.OrderProductListFragment">
+        android:name="co.innoshop.android.ui.orders.OrderProductListFragment">
         <argument
             android:name="orderId"
             android:defaultValue='""'
@@ -109,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/addOrderShipmentTrackingFragment"
-        android:name="com.woocommerce.android.ui.orders.AddOrderShipmentTrackingFragment"
+        android:name="co.innoshop.android.ui.orders.AddOrderShipmentTrackingFragment"
         tools:layout="@layout/fragment_add_shipment_tracking">
         <argument
             android:name="orderId"
@@ -142,7 +142,7 @@
         app:popExitAnim="@anim/activity_fade_out" />
     <fragment
         android:id="@+id/reviewDetailFragment"
-        android:name="com.woocommerce.android.ui.reviews.ReviewDetailFragment"
+        android:name="co.innoshop.android.ui.reviews.ReviewDetailFragment"
         tools:layout="@layout/fragment_review_detail">
         <argument
             android:name="remoteReviewId"
@@ -166,7 +166,7 @@
     <include app:graph="@navigation/nav_graph_products" />
     <fragment
         android:id="@+id/refundDetailFragment"
-        android:name="com.woocommerce.android.ui.refunds.RefundDetailFragment"
+        android:name="co.innoshop.android.ui.refunds.RefundDetailFragment"
         android:label="RefundDetailFragment">
         <argument
             android:name="orderId"

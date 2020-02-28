@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.woocommerce.android.ui.products.ProductImagesFragment">
+    tools:context="co.innoshop.android.ui.products.ProductImagesFragment">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addImageButton"
@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/margin_extra_large"
         android:layout_marginBottom="@dimen/margin_extra_large" />
 
-    <com.woocommerce.android.widgets.WCProductImageGalleryView
+    <co.innoshop.android.widgets.WCProductImageGalleryView
         android:id="@+id/imageGallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

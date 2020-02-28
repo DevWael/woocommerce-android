@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.woocommerce.android.widgets.WCToggleSingleOptionView
+    <co.innoshop.android.widgets.WCToggleSingleOptionView
         android:id="@+id/switchStatsV4UI"
         style="@style/Woo.Settings.Label"
         android:layout_width="0dp"
@@ -22,7 +22,7 @@
         android:visibility="gone"
         tools:visibility="visible"/>
 
-    <com.woocommerce.android.widgets.WCToggleSingleOptionView
+    <co.innoshop.android.widgets.WCToggleSingleOptionView
         android:id="@+id/switchProductsUI"
         style="@style/Woo.Settings.Label"
         android:layout_width="0dp"

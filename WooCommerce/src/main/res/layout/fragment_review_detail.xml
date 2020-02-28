@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:fillViewport="true"
     android:layout_height="match_parent"
-    tools:context="com.woocommerce.android.ui.reviews.ReviewDetailFragment">
+    tools:context="co.innoshop.android.ui.reviews.ReviewDetailFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

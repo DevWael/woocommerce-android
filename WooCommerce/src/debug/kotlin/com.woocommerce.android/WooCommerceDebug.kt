@@ -1,8 +1,8 @@
-package com.woocommerce.android
+package co.innoshop.android
 
 import com.facebook.stetho.Stetho
-import com.woocommerce.android.di.AppComponent
-import com.woocommerce.android.di.DaggerAppComponentDebug
+import co.innoshop.android.di.AppComponent
+import co.innoshop.android.di.DaggerAppComponentDebug
 
 open class WooCommerceDebug : WooCommerce() {
     override val component: AppComponent by lazy {

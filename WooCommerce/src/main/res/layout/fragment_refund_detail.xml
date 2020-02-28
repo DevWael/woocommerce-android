@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/default_window_background"
-        tools:context="com.woocommerce.android.ui.refunds.RefundByAmountFragment">
+        tools:context="co.innoshop.android.ui.refunds.RefundByAmountFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/refundDetail_refundItems"

@@ -36,7 +36,7 @@
         android:contentDescription="@string/orderdetail_change_order_status"
         android:background="?attr/selectableItemBackground">
 
-        <com.woocommerce.android.widgets.FlowLayout
+        <co.innoshop.android.widgets.FlowLayout
             android:id="@+id/orderStatus_orderTags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

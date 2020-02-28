@@ -1,9 +1,9 @@
-package com.woocommerce.android.di
+package co.innoshop.android.di
 
 import android.app.Application
-import com.woocommerce.android.media.ProductImagesServiceModule
-import com.woocommerce.android.push.FCMServiceModule
-import com.woocommerce.android.ui.login.LoginAnalyticsModule
+import co.innoshop.android.media.ProductImagesServiceModule
+import co.innoshop.android.push.FCMServiceModule
+import co.innoshop.android.ui.login.LoginAnalyticsModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule

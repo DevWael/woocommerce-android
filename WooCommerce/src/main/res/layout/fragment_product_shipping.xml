@@ -14,7 +14,7 @@
         android:paddingEnd="@dimen/card_padding_end"
         android:paddingBottom="@dimen/card_padding_bottom">
 
-        <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+        <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
             android:id="@+id/product_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:inputType="numberDecimal"
             app:editTextHint="@string/product_weight" />
 
-        <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+        <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
             android:id="@+id/product_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:inputType="numberDecimal"
             app:editTextHint="@string/product_length" />
 
-        <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+        <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
             android:id="@+id/product_width"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:inputType="numberDecimal"
             app:editTextHint="@string/product_width" />
 
-        <com.woocommerce.android.widgets.WCMaterialOutlinedEditTextView
+        <co.innoshop.android.widgets.WCMaterialOutlinedEditTextView
             android:id="@+id/product_height"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:inputType="numberDecimal"
             app:editTextHint="@string/product_height" />
 
-        <com.woocommerce.android.widgets.WCMaterialOutlinedSpinnerView
+        <co.innoshop.android.widgets.WCMaterialOutlinedSpinnerView
             android:id="@+id/product_shipping_class_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

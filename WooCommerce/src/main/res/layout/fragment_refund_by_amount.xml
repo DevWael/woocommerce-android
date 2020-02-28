@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="com.woocommerce.android.ui.refunds.RefundByAmountFragment">
+        tools:context="co.innoshop.android.ui.refunds.RefundByAmountFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAccessibility="no">
 
-                <com.woocommerce.android.widgets.CurrencyEditText
+                <co.innoshop.android.widgets.CurrencyEditText
                     android:id="@+id/issueRefund_refundAmount"
                     android:imeOptions="flagNoExtractUi"
                     android:layout_width="match_parent"

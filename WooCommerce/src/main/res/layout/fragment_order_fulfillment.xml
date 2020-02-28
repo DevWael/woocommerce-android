@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/default_window_background"
-    tools:context="com.woocommerce.android.ui.orders.OrderFulfillmentFragment">
+    tools:context="co.innoshop.android.ui.orders.OrderFulfillmentFragment">
 
     <LinearLayout
         android:orientation="vertical"
@@ -14,28 +14,28 @@
         android:layout_height="match_parent">
 
         <!-- Product List -->
-        <com.woocommerce.android.ui.orders.OrderDetailProductListView
+        <co.innoshop.android.ui.orders.OrderDetailProductListView
             android:id="@+id/orderFulfill_products"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Woo.Card.WithoutPadding"/>
 
         <!-- Customer Provided Note -->
-        <com.woocommerce.android.ui.orders.notes.OrderDetailCustomerNoteView
+        <co.innoshop.android.ui.orders.notes.OrderDetailCustomerNoteView
             android:id="@+id/orderFulfill_customerNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Woo.Card"/>
 
         <!-- Customer Info -->
-        <com.woocommerce.android.ui.orders.OrderDetailCustomerInfoView
+        <co.innoshop.android.ui.orders.OrderDetailCustomerInfoView
             android:id="@+id/orderFulfill_customerInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Woo.Card.Expandable"/>
 
         <!-- Add Optional Shipment Tracking -->
-        <com.woocommerce.android.ui.orders.OrderDetailShipmentTrackingListView
+        <co.innoshop.android.ui.orders.OrderDetailShipmentTrackingListView
             android:id="@+id/orderFulfill_addShipmentTracking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
